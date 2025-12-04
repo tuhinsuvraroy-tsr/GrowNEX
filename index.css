@@ -48,11 +48,7 @@ body {
 }
 
 /* Mode Toggle Switch */
-.mode-toggle {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-}
+
 
 .switch {
     position: relative;
