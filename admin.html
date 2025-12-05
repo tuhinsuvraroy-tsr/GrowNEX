@@ -1,0 +1,649 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - GrowNEX</title>
+    <link rel="stylesheet" href="index.css">
+    <style>
+        .admin-container {
+            display: flex;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%);
+        }
+
+        .sidebar {
+            width: 250px;
+            background: linear-gradient(135deg, #1b5e20, #2e7d32);
+            color: white;
+            padding-top: 2rem;
+            position: fixed;
+            height: 100%;
+            box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .sidebar-header {
+            text-align: center;
+            padding-bottom: 2rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .sidebar-header h2 {
+            color: white;
+            font-size: 1.5rem;
+        }
+
+        .sidebar-menu {
+            list-style: none;
+            padding: 0;
+            margin-top: 2rem;
+        }
+
+        .sidebar-menu li {
+            padding: 0;
+        }
+
+        .sidebar-menu a {
+            display: block;
+            padding: 1rem 2rem;
+            color: rgba(255, 255, 255, 0.9);
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+
+        .sidebar-menu a:hover,
+        .sidebar-menu a.active {
+            background-color: rgba(255, 255, 255, 0.1);
+            border-left: 4px solid #4caf50;
+        }
+
+        .main-content-admin {
+            margin-left: 250px;
+            flex: 1;
+            padding: 2rem;
+        }
+
+        .admin-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            background: linear-gradient(135deg, #ffffff 0%, #f5f5f5 100%);
+            padding: 1.5rem;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            border: 2px solid #4caf50;
+        }
+
+        .admin-header h2 {
+            color: #2e7d32;
+            font-size: 1.5rem;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            display: flex;
+            align-items: center;
+            transition: all 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        .stat-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            margin-right: 1rem;
+        }
+
+        .stat-info h3 {
+            margin: 0;
+            font-size: 1.8rem;
+            color: #2e7d32;
+        }
+
+        .stat-info p {
+            margin: 0;
+            color: #666;
+        }
+
+        .recent-table {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .recent-table h3 {
+            color: #2e7d32;
+            margin-bottom: 1rem;
+        }
+
+        .recent-table table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .recent-table th,
+        .recent-table td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid #ecf0f1;
+        }
+
+        .recent-table th {
+            color: #7f8c8d;
+            font-weight: 600;
+        }
+
+        .status-badge {
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+        }
+
+        .status-active {
+            background-color: #e8f8f5;
+            color: #2ecc71;
+        }
+
+        .status-pending {
+            background-color: #fef9e7;
+            color: #f1c40f;
+        }
+
+        .form-row {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .form-group {
+            flex: 1;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #34495e;
+            font-weight: 500;
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 0.8rem;
+            border: 1px solid #bdc3c7;
+            border-radius: 8px;
+            font-size: 1rem;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            border-color: #4caf50;
+            outline: none;
+        }
+
+        .soil-form-container {
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .soil-list-container {
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            margin-bottom: 2rem;
+        }
+
+        .soil-list-container h4 {
+            color: #2e7d32;
+            margin-bottom: 1rem;
+        }
+
+        .soil-record {
+            border: 2px solid #e8f5e9;
+            border-radius: 15px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.3s ease;
+            background: #fafafa;
+        }
+
+        .soil-record:hover {
+            border-color: #4caf50;
+            box-shadow: 0 4px 10px rgba(76, 175, 80, 0.15);
+        }
+
+        .soil-record-info h4 {
+            margin: 0 0 0.5rem 0;
+            color: #2e7d32;
+        }
+
+        .soil-record-info p {
+            margin: 0.25rem 0;
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .soil-record-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .btn-edit,
+        .btn-delete {
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .btn-edit {
+            background: linear-gradient(135deg, #4caf50, #388e3c);
+            color: white;
+        }
+
+        .btn-edit:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(76, 175, 80, 0.4);
+        }
+
+        .btn-delete {
+            background: linear-gradient(135deg, #f44336, #d32f2f);
+            color: white;
+        }
+
+        .btn-delete:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(244, 67, 54, 0.4);
+        }
+
+        .btn-login-submit {
+            background: linear-gradient(135deg, #4caf50, #388e3c);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-login-submit:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(76, 175, 80, 0.4);
+        }
+    </style>
+</head>
+
+<body>
+    <div class="admin-container">
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <h2>GrowNEX Admin</h2>
+            </div>
+            <ul class="sidebar-menu">
+                <li><a href="#" class="active">Dashboard</a></li>
+                <li><a href="#" id="manageSoilLink">Manage Soil Data</a></li>
+                <li><a href="#" id="logoutBtn">Logout</a></li>
+            </ul>
+        </aside>
+
+        <main class="main-content-admin">
+            <header class="admin-header">
+                <h2>Dashboard Overview</h2>
+                <div class="user-profile">
+                    <span>Welcome, Admin</span>
+                </div>
+            </header>
+
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon" style="background-color: #e8f8f5; color: #2ecc71;">👥</div>
+                    <div class="stat-info">
+                        <h3>1,234</h3>
+                        <p>Total Users</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon" style="background-color: #fef9e7; color: #f1c40f;">📄</div>
+                    <div class="stat-info">
+                        <h3>56</h3>
+                        <p>New Reports</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon" style="background-color: #ebf5fb; color: #3498db;">🌱</div>
+                    <div class="stat-info">
+                        <h3>892</h3>
+                        <p>Active Farms</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="recent-table" id="dashboardContent">
+                <h3>Recent User Registrations</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>User</th>
+                            <th>Email</th>
+                            <th>Date</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>John Doe</td>
+                            <td>john@example.com</td>
+                            <td>Dec 05, 2024</td>
+                            <td><span class="status-badge status-active">Active</span></td>
+                        </tr>
+                        <tr>
+                            <td>Jane Smith</td>
+                            <td>jane@example.com</td>
+                            <td>Dec 04, 2024</td>
+                            <td><span class="status-badge status-pending">Pending</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Soil Data Management Section -->
+            <div class="soil-management" id="soilManagementContent" style="display: none;">
+                <h3>Manage User Soil Data</h3>
+                <div class="soil-list-container" id="soilListContainer">
+                    <h4>Existing Soil Records</h4>
+                    <div id="soilRecordsList"></div>
+                </div>
+                <div class="soil-form-container" id="soilFormContainer" style="display: none;">
+                    <button id="backToListBtn" class="btn-login-submit" style="margin-bottom: 1rem;">← Back to
+                        List</button>
+                    <form id="soilDataForm">
+                        <input type="hidden" id="soilDataId">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="landArea">Land Area (Acres)</label>
+                                <input type="number" id="landArea" step="0.1" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="location">Location</label>
+                                <input type="text" id="location" required>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="soilType">Soil Type</label>
+                                <select id="soilType" required>
+                                    <option value="">Select Soil Type</option>
+                                    <option value="Sandy">Sandy</option>
+                                    <option value="Clay">Clay</option>
+                                    <option value="Loamy">Loamy</option>
+                                    <option value="Silty">Silty</option>
+                                    <option value="Peaty">Peaty</option>
+                                    <option value="Chalky">Chalky</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="irrigation">Irrigation</label>
+                                <select id="irrigation" required>
+                                    <option value="">Select Irrigation</option>
+                                    <option value="Drip">Drip</option>
+                                    <option value="Sprinkler">Sprinkler</option>
+                                    <option value="Flood">Flood</option>
+                                    <option value="Center Pivot">Center Pivot</option>
+                                    <option value="Manual">Manual</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="phLevel">pH Level</label>
+                                <input type="number" id="phLevel" step="0.1" min="0" max="14" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="nitrogen">Nitrogen (kg/ha)</label>
+                                <input type="number" id="nitrogen" step="0.1" min="0" required>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="phosphorus">Phosphorus (kg/ha)</label>
+                                <input type="number" id="phosphorus" step="0.1" min="0" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="potassium">Potassium (kg/ha)</label>
+                                <input type="number" id="potassium" step="0.1" min="0" required>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="organicCarbon">Organic Carbon (%)</label>
+                                <input type="number" id="organicCarbon" step="0.01" min="0" max="100" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="zinc">Zinc (ppm)</label>
+                                <input type="number" id="zinc" step="0.01" min="0" required>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn-login-submit" id="saveSoilBtn">Save Soil Data</button>
+                    </form>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // Check for admin token
+        const token = localStorage.getItem('token');
+        const user = JSON.parse(localStorage.getItem('user') || '{}');
+
+        if (!token || user.role !== 'admin') {
+            window.location.href = 'login.html';
+        }
+
+        document.getElementById('logoutBtn').addEventListener('click', (e) => {
+            e.preventDefault();
+            localStorage.removeItem('token');
+            localStorage.removeItem('user');
+            window.location.href = 'login.html';
+        });
+
+        // Navigation handlers
+        document.getElementById('manageSoilLink').addEventListener('click', (e) => {
+            e.preventDefault();
+            document.getElementById('dashboardContent').style.display = 'none';
+            document.getElementById('soilManagementContent').style.display = 'block';
+
+            // Update active menu
+            document.querySelectorAll('.sidebar-menu a').forEach(link => link.classList.remove('active'));
+            e.target.classList.add('active');
+
+            // Update header
+            document.querySelector('.admin-header h2').textContent = 'Manage Soil Data';
+
+            // Load soil records
+            loadSoilRecords();
+        });
+
+        // Load soil records from database
+        async function loadSoilRecords() {
+            try {
+                const response = await fetch('/api/soil/history');
+                const records = await response.json();
+
+                const recordsList = document.getElementById('soilRecordsList');
+                recordsList.innerHTML = '';
+
+                records.forEach(record => {
+                    const recordDiv = document.createElement('div');
+                    recordDiv.className = 'soil-record';
+                    recordDiv.innerHTML = `
+                        <div class="soil-record-info">
+                            <h4>${record.location}</h4>
+                            <p>Land Area: ${record.land_area} acres | Soil Type: ${record.soil_type}</p>
+                            <p>pH: ${record.ph_level} | N: ${record.nitrogen} | P: ${record.phosphorus} | K: ${record.potassium}</p>
+                            <p>Created: ${new Date(record.created_at).toLocaleDateString()}</p>
+                        </div>
+                        <div class="soil-record-actions">
+                            <button class="btn-edit" onclick="editSoilRecord(${record.id})">Edit</button>
+                            <button class="btn-delete" onclick="deleteSoilRecord(${record.id})">Delete</button>
+                        </div>
+                    `;
+                    recordsList.appendChild(recordDiv);
+                });
+            } catch (error) {
+                console.error('Error loading records:', error);
+            }
+        }
+
+        // Edit soil record
+        window.editSoilRecord = async function (id) {
+            try {
+                const response = await fetch(`/api/soil/analysis/${id}`);
+                const record = await response.json();
+
+                // Show form
+                document.getElementById('soilListContainer').style.display = 'none';
+                document.getElementById('soilFormContainer').style.display = 'block';
+
+                // Fill form with record data
+                document.getElementById('soilDataId').value = record.id;
+                document.getElementById('landArea').value = record.land_area;
+                document.getElementById('location').value = record.location;
+                document.getElementById('soilType').value = record.soil_type;
+                document.getElementById('irrigation').value = record.irrigation;
+                document.getElementById('phLevel').value = record.ph_level;
+                document.getElementById('nitrogen').value = record.nitrogen;
+                document.getElementById('phosphorus').value = record.phosphorus;
+                document.getElementById('potassium').value = record.potassium;
+                document.getElementById('organicCarbon').value = record.organic_carbon;
+                document.getElementById('zinc').value = record.zinc;
+
+                document.getElementById('saveSoilBtn').textContent = 'Update Soil Data';
+            } catch (error) {
+                console.error('Error loading record:', error);
+            }
+        }
+
+        // Delete soil record
+        window.deleteSoilRecord = async function (id) {
+            if (confirm('Are you sure you want to delete this soil record?')) {
+                try {
+                    const response = await fetch(`/api/soil/analysis/${id}`, {
+                        method: 'DELETE'
+                    });
+
+                    if (response.ok) {
+                        alert('Soil record deleted successfully!');
+                        loadSoilRecords();
+                    } else {
+                        alert('Error deleting record');
+                    }
+                } catch (error) {
+                    console.error('Error deleting record:', error);
+                    alert('Network error');
+                }
+            }
+        }
+
+        // Back to list button
+        document.getElementById('backToListBtn').addEventListener('click', () => {
+            document.getElementById('soilListContainer').style.display = 'block';
+            document.getElementById('soilFormContainer').style.display = 'none';
+            document.getElementById('soilDataForm').reset();
+            document.getElementById('saveSoilBtn').textContent = 'Save Soil Data';
+        });
+
+        // Soil data form submission
+        document.getElementById('soilDataForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const soilDataId = document.getElementById('soilDataId').value;
+            const isUpdate = soilDataId !== '';
+
+            const soilData = {
+                land_area: parseFloat(document.getElementById('landArea').value),
+                location: document.getElementById('location').value,
+                soil_type: document.getElementById('soilType').value,
+                irrigation: document.getElementById('irrigation').value,
+                ph_level: parseFloat(document.getElementById('phLevel').value),
+                nitrogen: parseFloat(document.getElementById('nitrogen').value),
+                phosphorus: parseFloat(document.getElementById('phosphorus').value),
+                potassium: parseFloat(document.getElementById('potassium').value),
+                organic_carbon: parseFloat(document.getElementById('organicCarbon').value),
+                zinc: parseFloat(document.getElementById('zinc').value)
+            };
+
+            try {
+                const url = isUpdate
+                    ? `/api/soil/analysis/${soilDataId}`
+                    : '/api/soil/analyze';
+
+                const response = await fetch(url, {
+                    method: isUpdate ? 'PUT' : 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(soilData)
+                });
+
+                const result = await response.json();
+
+                if (response.ok) {
+                    alert(isUpdate ? 'Soil data updated successfully!' : 'Soil data saved successfully!');
+                    document.getElementById('soilDataForm').reset();
+                    document.getElementById('soilDataId').value = '';
+                    document.getElementById('saveSoilBtn').textContent = 'Save Soil Data';
+
+                    // Go back to list and refresh
+                    document.getElementById('soilListContainer').style.display = 'block';
+                    document.getElementById('soilFormContainer').style.display = 'none';
+                    loadSoilRecords();
+
+                    // Show results
+                    console.log('Soil Score:', result.soil_score);
+                    console.log('Fertilizers:', result.fertilizers);
+                    console.log('Pesticides:', result.pesticides);
+                    console.log('Crops:', result.recommended_crops);
+                } else {
+                    alert('Error: ' + (result.error || 'Failed to save soil data'));
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Network error. Please try again.');
+            }
+        });
+    </script>
+</body>
+
+</html>

@@ -1,11 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>GrowNEX - Smart Farming Solutions</title>
     <link rel="stylesheet" href="index.css">
 </head>
+
 <body>
     <!-- Header -->
     <header class="header">
@@ -14,8 +16,12 @@
                 <h1>🌱 GrowNEX</h1>
             </div>
             <nav class="nav">
-                
-                <button class="btn-login" id="loginBtn">Login / Sign Up</button>
+                <!-- Show user info and logout (only visible when logged in) -->
+                <div class="user-info" id="userInfo" style="display: flex; align-items: center; gap: 15px;">
+                    <span id="userName" style="color: white;">Welcome</span>
+                    <a href="#" class="bubbles btn-logout" onclick="logout(); return false;"><span
+                            class="text">Logout</span></a>
+                </div>
             </nav>
         </div>
     </header>
@@ -37,7 +43,8 @@
                         <div class="circular-progress">
                             <svg class="progress-ring" width="200" height="200">
                                 <circle class="progress-ring-circle-bg" cx="100" cy="100" r="80"></circle>
-                                <circle class="progress-ring-circle" cx="100" cy="100" r="80" id="progressCircle"></circle>
+                                <circle class="progress-ring-circle" cx="100" cy="100" r="80" id="progressCircle">
+                                </circle>
                             </svg>
                             <div class="score-display">
                                 <span class="score-number" id="healthScore">7.8</span>
@@ -46,7 +53,8 @@
                         </div>
                         <div class="health-status">
                             <span class="status-badge good" id="statusBadge">Good</span>
-                            <p class="status-desc">Your soil is in good condition with minor improvements needed</p>
+                            <p class="status-desc" id="statusDesc">Your soil is in good condition with minor
+                                improvements needed</p>
                         </div>
                     </div>
                 </div>
@@ -59,19 +67,19 @@
                     <div class="info-grid">
                         <div class="info-item">
                             <span class="info-label">Total Area:</span>
-                            <span class="info-value">5.2 Acres</span>
+                            <span class="info-value" id="landArea">Loading...</span>
                         </div>
                         <div class="info-item">
                             <span class="info-label">Location:</span>
-                            <span class="info-value">Sector 7, Plot 142</span>
+                            <span class="info-value" id="location">Loading...</span>
                         </div>
                         <div class="info-item">
                             <span class="info-label">Soil Type:</span>
-                            <span class="info-value">Loamy Soil</span>
+                            <span class="info-value" id="soilType">Loading...</span>
                         </div>
                         <div class="info-item">
                             <span class="info-label">Irrigation:</span>
-                            <span class="info-value">Drip System</span>
+                            <span class="info-value" id="irrigation">Loading...</span>
                         </div>
                     </div>
                 </div>
@@ -85,78 +93,78 @@
                     <div class="profile-card">
                         <h4>pH Level</h4>
                         <div class="meter-bar">
-                            <div class="meter-fill ph-fill" style="width: 78%"></div>
+                            <div class="meter-fill ph-fill" id="phFill" style="width: 0%"></div>
                         </div>
                         <div class="values">
-                            <span class="current">Current: 6.5</span>
+                            <span class="current" id="phCurrent">Current: --</span>
                             <span class="ideal">Ideal: 6.0-7.5</span>
                         </div>
-                        <span class="status-icon">✓</span>
+                        <span class="status-icon" id="phStatus">✓</span>
                     </div>
 
                     <!-- Nitrogen -->
                     <div class="profile-card">
                         <h4>Nitrogen (N)</h4>
                         <div class="meter-bar">
-                            <div class="meter-fill nitrogen-fill" style="width: 65%"></div>
+                            <div class="meter-fill nitrogen-fill" id="nitrogenFill" style="width: 0%"></div>
                         </div>
                         <div class="values">
-                            <span class="current">Current: 195 kg/ha</span>
+                            <span class="current" id="nitrogenCurrent">Current: -- kg/ha</span>
                             <span class="ideal">Ideal: 250-300 kg/ha</span>
                         </div>
-                        <span class="status-icon warning">⚠</span>
+                        <span class="status-icon" id="nitrogenStatus">✓</span>
                     </div>
 
                     <!-- Phosphorus -->
                     <div class="profile-card">
                         <h4>Phosphorus (P)</h4>
                         <div class="meter-bar">
-                            <div class="meter-fill phosphorus-fill" style="width: 82%"></div>
+                            <div class="meter-fill phosphorus-fill" id="phosphorusFill" style="width: 0%"></div>
                         </div>
                         <div class="values">
-                            <span class="current">Current: 41 kg/ha</span>
+                            <span class="current" id="phosphorusCurrent">Current: -- kg/ha</span>
                             <span class="ideal">Ideal: 40-50 kg/ha</span>
                         </div>
-                        <span class="status-icon">✓</span>
+                        <span class="status-icon" id="phosphorusStatus">✓</span>
                     </div>
 
                     <!-- Potassium -->
                     <div class="profile-card">
                         <h4>Potassium (K)</h4>
                         <div class="meter-bar">
-                            <div class="meter-fill potassium-fill" style="width: 88%"></div>
+                            <div class="meter-fill potassium-fill" id="potassiumFill" style="width: 0%"></div>
                         </div>
                         <div class="values">
-                            <span class="current">Current: 352 kg/ha</span>
+                            <span class="current" id="potassiumCurrent">Current: -- kg/ha</span>
                             <span class="ideal">Ideal: 300-400 kg/ha</span>
                         </div>
-                        <span class="status-icon">✓</span>
+                        <span class="status-icon" id="potassiumStatus">✓</span>
                     </div>
 
                     <!-- Organic Carbon -->
                     <div class="profile-card">
                         <h4>Organic Carbon</h4>
                         <div class="meter-bar">
-                            <div class="meter-fill carbon-fill" style="width: 72%"></div>
+                            <div class="meter-fill carbon-fill" id="carbonFill" style="width: 0%"></div>
                         </div>
                         <div class="values">
-                            <span class="current">Current: 0.54%</span>
+                            <span class="current" id="carbonCurrent">Current: --%</span>
                             <span class="ideal">Ideal: 0.5-0.75%</span>
                         </div>
-                        <span class="status-icon">✓</span>
+                        <span class="status-icon" id="carbonStatus">✓</span>
                     </div>
 
                     <!-- Zinc -->
                     <div class="profile-card">
                         <h4>Zinc (Zn)</h4>
                         <div class="meter-bar">
-                            <div class="meter-fill zinc-fill" style="width: 55%"></div>
+                            <div class="meter-fill zinc-fill" id="zincFill" style="width: 0%"></div>
                         </div>
                         <div class="values">
-                            <span class="current">Current: 0.44 ppm</span>
+                            <span class="current" id="zincCurrent">Current: -- ppm</span>
                             <span class="ideal">Ideal: 0.6-1.0 ppm</span>
                         </div>
-                        <span class="status-icon warning">⚠</span>
+                        <span class="status-icon" id="zincStatus">✓</span>
                     </div>
                 </div>
             </section>
@@ -165,26 +173,12 @@
             <section class="recommendations">
                 <div class="recommendation-card">
                     <h3>🌾 Essential Fertilizers</h3>
-                    <div class="recommendation-list">
-                        <div class="recommendation-item">
-                            <div class="rec-icon">💧</div>
+                    <div class="recommendation-list" id="fertilizersList">
+                        <div class="recommendation-item loading">
+                            <div class="rec-icon">⏳</div>
                             <div class="rec-details">
-                                <h4>Urea (46-0-0)</h4>
-                                <p>Application: 150 kg/acre | Frequency: Before sowing & 30 days after</p>
-                            </div>
-                        </div>
-                        <div class="recommendation-item">
-                            <div class="rec-icon">💧</div>
-                            <div class="rec-details">
-                                <h4>DAP (18-46-0)</h4>
-                                <p>Application: 80 kg/acre | Frequency: At the time of sowing</p>
-                            </div>
-                        </div>
-                        <div class="recommendation-item">
-                            <div class="rec-icon">💧</div>
-                            <div class="rec-details">
-                                <h4>Zinc Sulphate</h4>
-                                <p>Application: 25 kg/acre | Frequency: Once before sowing</p>
+                                <h4>Loading recommendations...</h4>
+                                <p>Analyzing your soil data</p>
                             </div>
                         </div>
                     </div>
@@ -192,26 +186,12 @@
 
                 <div class="recommendation-card">
                     <h3>🛡️ Essential Pesticides</h3>
-                    <div class="recommendation-list">
-                        <div class="recommendation-item">
-                            <div class="rec-icon">🔬</div>
+                    <div class="recommendation-list" id="pesticidesList">
+                        <div class="recommendation-item loading">
+                            <div class="rec-icon">⏳</div>
                             <div class="rec-details">
-                                <h4>Chlorpyrifos 20% EC</h4>
-                                <p>Application: 2 ml/liter | Purpose: Termite & root borer control</p>
-                            </div>
-                        </div>
-                        <div class="recommendation-item">
-                            <div class="rec-icon">🔬</div>
-                            <div class="rec-details">
-                                <h4>Mancozeb 75% WP</h4>
-                                <p>Application: 2.5 gm/liter | Purpose: Fungal disease prevention</p>
-                            </div>
-                        </div>
-                        <div class="recommendation-item">
-                            <div class="rec-icon">🔬</div>
-                            <div class="rec-details">
-                                <h4>Imidacloprid 17.8% SL</h4>
-                                <p>Application: 0.5 ml/liter | Purpose: Sucking pest control</p>
+                                <h4>Loading recommendations...</h4>
+                                <p>Analyzing your soil data</p>
                             </div>
                         </div>
                     </div>
@@ -221,47 +201,22 @@
             <!-- Crop Recommendations -->
             <section class="crops-section">
                 <h3>🌾 Recommended Crops for Your Land</h3>
-                <div class="crops-grid">
-                    <div class="crop-card">
-                        <div class="crop-icon">🌾</div>
-                        <h4>Wheat</h4>
-                        <p class="crop-timing">Sowing: Oct-Nov | Harvest: Mar-Apr</p>
-                        <p class="crop-yield">Expected Yield: 18-22 quintals/acre</p>
-                        <span class="crop-badge recommended">Highly Recommended</span>
-                    </div>
-                    <div class="crop-card">
-                        <div class="crop-icon">🌽</div>
-                        <h4>Maize</h4>
-                        <p class="crop-timing">Sowing: Jun-Jul | Harvest: Sep-Oct</p>
-                        <p class="crop-yield">Expected Yield: 25-30 quintals/acre</p>
-                        <span class="crop-badge suitable">Suitable</span>
-                    </div>
-                    <div class="crop-card">
-                        <div class="crop-icon">🥔</div>
-                        <h4>Potato</h4>
-                        <p class="crop-timing">Sowing: Oct-Nov | Harvest: Feb-Mar</p>
-                        <p class="crop-yield">Expected Yield: 80-100 quintals/acre</p>
-                        <span class="crop-badge recommended">Highly Recommended</span>
-                    </div>
-                    <div class="crop-card">
-                        <div class="crop-icon">🌱</div>
-                        <h4>Mustard</h4>
-                        <p class="crop-timing">Sowing: Oct-Nov | Harvest: Feb-Mar</p>
-                        <p class="crop-yield">Expected Yield: 6-8 quintals/acre</p>
-                        <span class="crop-badge suitable">Suitable</span>
+                <div class="crops-grid" id="cropsList">
+                    <div class="crop-card loading">
+                        <div class="crop-icon">⏳</div>
+                        <h4>Loading...</h4>
+                        <p class="crop-timing">Analyzing your soil data</p>
                     </div>
                 </div>
             </section>
 
             <!-- Action Buttons -->
             <section class="action-section">
-                <button class="btn-action btn-expert" id="callExpertBtn">
-                    <span class="btn-icon">📞</span>
-                    <span class="btn-text">Call an Expert</span>
+                <button class="bubbles btn-expert" id="callExpertBtn">
+                    <span class="text">📞 Call an Expert</span>
                 </button>
-                <button class="btn-action btn-service" id="bookServiceBtn">
-                    <span class="btn-icon">📅</span>
-                    <span class="btn-text">Book Our Service</span>
+                <button class="bubbles btn-service" id="bookServiceBtn">
+                    <span class="text">📅 Book Our Service</span>
                 </button>
             </section>
         </div>
@@ -273,7 +228,8 @@
             <div class="footer-grid">
                 <div class="footer-section">
                     <h4>About GrowNEX</h4>
-                    <p>Empowering farmers with smart agricultural solutions and real-time soil monitoring for better crop yields.</p>
+                    <p>Empowering farmers with smart agricultural solutions and real-time soil monitoring for better
+                        crop yields.</p>
                 </div>
                 <div class="footer-section">
                     <h4>Quick Links</h4>
@@ -306,7 +262,8 @@
                 </div>
             </div>
             <div class="footer-bottom">
-                <p>&copy; 2024 GrowNEX. All rights reserved. | <a href="#privacy">Privacy Policy</a> | <a href="#terms">Terms of Service</a></p>
+                <p>&copy; 2024 GrowNEX. All rights reserved. | <a href="#privacy">Privacy Policy</a> | <a
+                        href="#terms">Terms of Service</a></p>
             </div>
         </div>
     </footer>
@@ -327,4 +284,5 @@
 
     <script src="index.js"></script>
 </body>
+
 </html>

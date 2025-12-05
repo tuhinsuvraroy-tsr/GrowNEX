@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - GrowNEX</title>
+    <link rel="stylesheet" href="index.css">
+    <style>
+        body,
+        html {
+            height: 100%;
+            margin: 0;
+            overflow: hidden;
+        }
+
+        .login-container {
+            display: flex;
+            height: 100vh;
+            width: 100vw;
+        }
+
+        .login-left {
+            flex: 1;
+            background: linear-gradient(135deg, #e0f7fa 0%, #ffffff 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            padding: 2rem;
+        }
+
+        .login-right {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #ffffff;
+            box-shadow: -5px 0 15px rgba(0, 0, 0, 0.05);
+            padding: 2rem;
+        }
+
+        .login-box {
+            width: 100%;
+            max-width: 400px;
+            padding: 2rem;
+        }
+
+        .login-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .login-header h2 {
+            font-size: 2rem;
+            color: #2c3e50;
+            margin-bottom: 0.5rem;
+        }
+
+        .login-header p {
+            color: #7f8c8d;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #34495e;
+            font-weight: 500;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 0.8rem;
+            border: 1px solid #bdc3c7;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border-color 0.3s;
+        }
+
+        .form-group input:focus {
+            border-color: #2ecc71;
+            outline: none;
+        }
+
+        .btn-login-submit {
+            width: 100%;
+            padding: 1rem;
+            background-color: #2ecc71;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .btn-login-submit:hover {
+            background-color: #27ae60;
+        }
+
+        .back-link {
+            display: block;
+            text-align: center;
+            margin-top: 1.5rem;
+            color: #7f8c8d;
+            text-decoration: none;
+        }
+
+        .back-link:hover {
+            color: #2ecc71;
+        }
+
+        .error-message {
+            color: #e74c3c;
+            text-align: center;
+            margin-bottom: 1rem;
+            display: none;
+        }
+    </style>
+    <script src="https://unpkg.com/@lottiefiles/dotlottie-wc@0.8.5/dist/dotlottie-wc.js" type="module"></script>
+</head>
+
+<body>
+    <div class="login-container">
+        <div class="login-left">
+            <dotlottie-wc src="https://lottie.host/8fee4eff-7e9e-4d5b-af62-1ec2288a9a23/y4v3AqlokH.lottie"
+                style="width: 400px;height: 400px" autoplay loop></dotlottie-wc>
+            <h1 style="color: #27ae60; margin-top: 1rem;">GrowNEX</h1>
+            <p style="color: #555; font-size: 1.2rem;">Smart Farming for a Better Future</p>
+        </div>
+        <div class="login-right">
+            <div class="login-box">
+                <div class="login-header">
+                    <h2>Welcome Back</h2>
+                    <p>Please enter your details to sign in</p>
+                </div>
+                <div class="error-message" id="errorMessage">Invalid credentials</div>
+                <form id="loginForm">
+                    <div class="form-group">
+                        <label for="email">Email Address</label>
+                        <input type="email" id="email" required placeholder="Enter your email">
+                    </div>
+                    <div class="form-group">
+                        <label for="password">Password</label>
+                        <input type="password" id="password" required placeholder="Enter your password">
+                    </div>
+                    <button type="submit" class="btn-login-submit">Sign In</button>
+                </form>
+                <a href="index.html" class="back-link">← Back to Home</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('loginForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const errorMsg = document.getElementById('errorMessage');
+
+            try {
+                const response = await fetch('/api/auth/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email, password })
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    localStorage.setItem('token', data.token);
+                    localStorage.setItem('user', JSON.stringify(data.user));
+
+                    if (data.user.role === 'admin') {
+                        window.location.href = 'admin.html';
+                    } else {
+                        window.location.href = 'index.html';
+                    }
+                } else {
+                    errorMsg.textContent = data.message || 'Login failed';
+                    errorMsg.style.display = 'block';
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                errorMsg.textContent = 'Network error. Please try again.';
+                errorMsg.style.display = 'block';
+            }
+        });
+    </script>
+</body>
+
+</html>
